@@ -10,29 +10,29 @@
                     <div class="form-group row">
                         <div class="col">
                             <label for="nombre">Nombre</label>
-                            <input type="text" name="nombre" class="form-control" id="nombre" value="<?php $this->usuario->nombre ?>"  required>
+                            <input type="text" name="nombre" data-validacion="nombre" class="form-control" id="nombre" value="<?php $this->usuario->nombre ?>"  required>
                         </div>
                         <div class="col">
                             <label for="apellido">Apellido</label>
-                            <input type="text" name="apellido" class="form-control" id="apellido" value="<?php $this->usuario->apellido ?>"  required>
+                            <input type="text" name="apellido" data-validacion="nombre" class="form-control" id="apellido" value="<?php $this->usuario->apellido ?>"  required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="staticEmail">Email</label>
-                        <input type="email" name="email" class="form-control" id="staticEmail" value="<?php $this->usuario->email ?>"  required>
+                        <input type="email" name="email" data-validacion="email" class="form-control" id="staticEmail" value="<?php $this->usuario->email ?>"  required>
                     </div>
                     <div class="form-group">
                         <label for="fotoPerfil">Adjuntar foto de perfil</label>
-                        <input type="file" name="foto" class="form-control-file" id="fotoPerfil">
+                        <input type="file" name="foto" class="form-control-file" id="fotoPerfil" required>
                     </div>
                     <div class="form-group row">
                         <div class="col">
-                            <label for="inputPassword">Password</label>
-                            <input type="password" name="password" class="form-control" id="inputPassword" required>
+                            <label for="inputPassword">Contraseña</label>
+                            <input type="password" name="password" data-validacion="password" class="form-control" id="inputPassword" required>
                         </div>
                         <div class="col">
                             <label for="inputConfirmPassword">Confirmar contraseña</label>
-                            <input type="password" name="confirm_password" class="form-control" id="inputConfirmPassword" required>
+                            <input type="password" name="confirm_password" data-validacion="confirm-password" class="form-control" id="inputConfirmPassword" required>
                         </div>
                     </div>
                     <div class="form-group">

@@ -15,14 +15,16 @@ abstract class BasicController
     protected $route_params;
     protected $pager_params;
     protected $post_params;
+    protected $alert;
 
-    public function __construct($route_params = [],$post_params = [])
+    public function __construct($route_params = [],$post_params = [],$alert = null)
     {
         $this->pager_params = array();
         $this->extractParamIntoPage($route_params,'size');
         $this->extractParamIntoPage($route_params,'page');
         $this->route_params = $route_params;
         $this->post_params = $post_params;
+        $this->alert = $alert;
     }
 
     private function extractParamIntoPage($params,$name){
@@ -34,6 +36,7 @@ abstract class BasicController
 
     protected function initView($view){
         $view->queryParams = $this->route_params;
+        $view->setAlert($this->alert);
         $view->init();
     }
 

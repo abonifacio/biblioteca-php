@@ -21,6 +21,7 @@ class Libro extends AbstractEntity
     public $cantidad;
     public $prestados;
     public $reservados;
+    public $currentUserHasIt = false;
 
     public static function getTable()
     {

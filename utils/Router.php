@@ -12,11 +12,11 @@ use Exception\NotFoundException;
 class Router
 {
 
-    private $routes = [];
+    private static $routes = [];
 
-    private $params = [];
+    private static $params = [];
 
-    public function add($route, $params = [])
+    public static function add($route, $params = [])
     {
         $route = preg_replace('/\//', '\\/', $route);
 
@@ -26,19 +26,19 @@ class Router
 
         $route = '/^' . $route . '$/i';
 
-        $this->routes[$route] = $params;
+        Router::$routes[$route] = $params;
     }
 
-    public function match($url)
+    public static function match($url)
     {
-        foreach ($this->routes as $route => $params) {
+        foreach (Router::$routes as $route => $params) {
             if (preg_match($route, $url, $matches)) {
                 foreach ($matches as $key => $match) {
                     if (is_string($key)) {
                         $params[$key] = $match;
                     }
                 }
-                $this->params = $params;
+                Router::$params = $params;
                 return true;
             }
         }
@@ -46,49 +46,56 @@ class Router
         return false;
     }
 
-    private function addQueryParams(){
+    private static function addQueryParams(){
         $query_params = array();
         parse_str($_SERVER['QUERY_STRING'], $query_params);
-        $this->params = array_merge($query_params,$this->params);
+        Router::$params = array_merge($query_params,Router::$params);
     }
 
     /**
      * @param $url
      * @param null $method
      * @param array $params
+     * @param array $alerts
      * @throws NotFoundException
      * @throws \Exception
      */
-    public function dispatch($url, $method = null,$params = [])
+    public static function dispatch($url, $method = null,$params = [])
     {
 
-        if (!$this->match($url)) throw new NotFoundException('Ninguna url fue encontrada: '.$url, 404);
+        if (!Router::match($url)) throw new NotFoundException('Ninguna url fue encontrada: '.$url, 404);
 
         if(is_null($method)) $method = $_SERVER['REQUEST_METHOD'];
 
-        $this->params = array_merge($params,$this->params);
-        $this->addQueryParams();
+        Router::$params = array_merge($params,Router::$params);
+        Router::addQueryParams();
 
-        $controller = $this->params['controller'];
+        $controller = Router::$params['controller'];
         $controller = 'Controller\\' . $controller. 'Controller';
 
         if (!class_exists($controller)) throw new \Exception("Controller $controller no existe");
 
-        if(isset($this->params['interceptors'])){
-            foreach ($this->params['interceptors'] as $int_name){
+        if(isset(Router::$params['interceptors'])){
+            foreach (Router::$params['interceptors'] as $int_name){
                 $interceptor = 'Interceptor\\' . $int_name. 'Interceptor';
                 if(!class_exists($interceptor)) throw new \Exception("Interceptor $interceptor no existe");
                 $interceptor_object = new $interceptor();
-                $interceptor_object->intercept($this->params,$_POST);
+                $interceptor_object->intercept(Router::$params,$_POST);
             }
         }
-
-        $controller_object = new $controller($this->params,$_POST);
-
-        if(is_array($this->params['action'])){
-            $action = $this->params['action'][$method];
+        if(isset($_COOKIE['AlertMessage']) && isset($_COOKIE['AlertType'])){
+            $alert = ['message'=>$_COOKIE['AlertMessage'],'type'=>$_COOKIE['AlertType']];
+            setcookie('AlertMessage','',time()-1);
+            setcookie('AlertType','',time()-1);
+            $controller_object = new $controller(Router::$params,$_POST,$alert);
         }else{
-            $action = $this->params['action'];
+            $controller_object = new $controller(Router::$params,$_POST);
+        }
+
+        if(is_array(Router::$params['action'])){
+            $action = Router::$params['action'][$method];
+        }else{
+            $action = Router::$params['action'];
         }
 
         if (!preg_match('/action$/i', $action) == 0) throw new \Exception("Metodo $action de controller $controller no existe");
@@ -97,8 +104,45 @@ class Router
 
     }
 
-    public static function redirect($path){
+    public static function redirect($path,$alert = null){
+        if(!is_null($alert)){
+            setcookie("AlertMessage",$alert['message'],time()+360);
+            setcookie("AlertType",$alert['type'],time()+360);
+        }
         header('Location: '.$_SERVER['CONTEXT_PREFIX'].$path);
+    }
+
+    public static function getUrl($path = null){
+        if(is_null($path)){
+            return substr($_SERVER['REQUEST_URI'],strlen($_SERVER['CONTEXT_PREFIX']));
+        }
+        return $_SERVER['CONTEXT_PREFIX'].$path;
+    }
+
+    public static function getCurrentUrlWithPage($pageNum){
+        $url = strtok($_SERVER["REQUEST_URI"],'?');
+        $tmp = $_GET;
+        $tmp['page'] = $pageNum;
+        return $url.'?'.http_build_query($tmp);
+    }
+
+    public static function getSizeUrl($size){
+        $url = strtok($_SERVER["REQUEST_URI"],'?');
+        $tmp = $_GET;
+        $tmp['size'] = $size;
+        return $url.'?'.http_build_query($tmp);
+    }
+
+    public static function errorMessage($msg){
+        return ['message'=>$msg,'type'=>'danger'];
+    }
+
+    public static function successMessage($msg){
+        return ['message'=>$msg,'type'=>'success'];
+    }
+
+    public static function warningMessage($msg){
+        return ['message'=>$msg,'type'=>'warning'];
     }
 
 }

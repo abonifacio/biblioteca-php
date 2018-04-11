@@ -30,10 +30,11 @@ class UsuarioRepository extends AbstractRepository
     public static function save(Usuario $user){
         $foto = file_get_contents($user->foto);
         $sql = "INSERT INTO usuarios (email,nombre,apellido,foto,clave,rol) values (?,?,?,?,?,'LECTOR')";
-        parent::insert($sql,['sssbs',$user->email,$user->nombre,$user->apellido,$foto,$user->clave]);
+        parent::insert($sql,['sssss',$user->email,$user->nombre,$user->apellido,$foto,$user->clave]);
     }
 
     public static function emailExists($email){
         return parent::count("SELECT COUNT(*) FROM usuarios where email = ?",['s',$email])>0;
     }
+
 }

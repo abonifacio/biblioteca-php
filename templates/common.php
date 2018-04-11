@@ -8,16 +8,31 @@
     <!-- Material Design for Bootstrap fonts and icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
 
+    <style type="text/css">
+        .foto-perfil{
+            max-height: 150px;
+            max-width: 300px;
+        }
+        .foto-portada-datalle{
+            max-height: 300px;
+            max-width: 500px;
+        }
+    </style>
     <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="<?php echo $this->getStatic('bootstrap-material-design.min.css') ?>">
     <title><?php echo $this->title ?></title>
 </head>
 <body>
+<?php if($this->isAlert()){ ?>
+    <div class="alert alert-<?php echo $this->getAlertType() ?>" role="alert">
+        <?php echo $this->getAlertMessage() ?>
+    </div>
+<?php } ?>
 <div class="container">
     <div class="row justify-content-end pt-3">
         <div class="col-auto">
             <?php if($this->isLoggedIn()) { ?>
-                <a href="<?php echo $this->getUrl('/perfil') ?>">
+                <a href="<?php echo $this->isBibliotecario()? $this->getUrl('/admin') : $this->getUrl('/perfil')  ?>">
                     <?php echo $this->getCurrentEmail() ?>
                 </a>
                 |
@@ -33,7 +48,9 @@
     </div>
     <div class="row align-items-center">
         <div class="col-sm-6">
-            <h1><a href="<?php echo $this->getUrl('/') ?>">Biblioteca</a></h1>
+            <a href="<?php echo $this->getUrl('/') ?>">
+                <img src="<?php echo $this->getStatic('logo_informatica_large.png') ?>" alt="Biblioteca">
+            </a>
         </div>
         <div class="col-sm-6">
             <form action="<?php echo $this->getUrl('/') ?>" method="GET">

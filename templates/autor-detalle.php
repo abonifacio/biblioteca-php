@@ -11,7 +11,9 @@
         <th scope="col">Disponibles</th>
         <th scope="col">Prestados</th>
         <th scope="col">Reservados</th>
-        <th class="pl-4" scope="col">Acción</th>
+        <?php if($this->isLector()) { ?>
+            <th class="pl-4" scope="col">Acción</th>
+        <?php } ?>
     </tr>
     </thead>
     <tbody>
@@ -24,7 +26,15 @@
             <td class="align-middle"><?php echo $libro->getDisponibles() ?></td>
             <td class="align-middle"><?php echo $libro->prestados ?></td>
             <td class="align-middle"><?php echo $libro->reservados ?></td>
-            <td class="align-middle"><button type="button" class="btn btn-success">Reservar</button></td>
+            <?php if($this->isLector()) { ?>
+                <td class="align-middle">
+                    <form action="<?php echo $this->getUrl('/reservar') ?>" method="POST">
+                        <input type="hidden" name="libro_id" value="<?php echo $libro->id ?>" />
+                        <input type="hidden" name="current_url" value="<?php echo $this->getUrl() ?>" />
+                        <button type="submit" class="btn btn-success" <?php echo ($libro->getDisponibles()<1 || $libro->currentUserHasIt) ? 'disabled="true"' : '' ?>>Reservar</button>
+                    </form>
+                </td>
+            <?php } ?>
         </tr>
     <?php } ?>
     <tr class="table-light">

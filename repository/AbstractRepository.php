@@ -51,6 +51,12 @@ abstract class AbstractRepository
         }
     }
 
+    protected static function update($sql, $params=[]){
+        if(!self::execute($sql,$params,true)){
+            throw new \Exception('Se produjo un error al persistir los datos');
+        }
+    }
+
     protected static function findOne($sql,$params = []){
         $res = self::execute($sql,$params);
         $list = self::extractResult($res['rows']);

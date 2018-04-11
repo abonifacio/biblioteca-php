@@ -45,16 +45,4 @@ class LibroRepository extends AbstractRepository
         return self::page($sql,self::formatParams($params),$pager);
     }
 
-    public static function countReservados($libroId){
-        return parent::count(self::getSQLForCountOperaciones('RESERVADO',$libroId));
-    }
-
-    public static function countPrestados($libroId){
-        return parent::count(self::getSQLForCountOperaciones('PRESTADO',$libroId));
-    }
-
-
-    private static function getSQLForCountOperaciones($estado,$libroId){
-        return "SELECT count(*) FROM operaciones WHERE ultimo_estado = '$estado' AND libros_id = $libroId";
-    }
 }

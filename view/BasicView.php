@@ -9,17 +9,20 @@
 namespace View;
 
 use Utils\AuthenticactionService;
+use Utils\Router;
 
 abstract class BasicView
 {
     private $STATIC_DIRS = [
         '/.*\.css/'=>'css',
-        '/.*\.js/'=>'js'
+        '/.*\.js/'=>'js',
+        '/.*\.(png|jpg)/'=>'images',
     ];
 
     public $templateUrl;
     public $title;
     public $queryParams = [];
+    private $alert = null;
 
     public function __construct($template,$title='Biblioteca')
     {
@@ -48,8 +51,8 @@ abstract class BasicView
         return 'not-found';
     }
 
-    public function getUrl($path){
-        return $_SERVER['CONTEXT_PREFIX'].$path;
+    public function getUrl($path = null){
+        return Router::getUrl($path);
     }
 
     public function getQueryParam($param){
@@ -58,6 +61,14 @@ abstract class BasicView
 
     public function isLoggedIn(){
         return AuthenticactionService::isAuthenticated();
+    }
+
+    public function isBibliotecario(){
+        return AuthenticactionService::isAuthenticated() && AuthenticactionService::getCurrentRol()==='BIBLIOTECARIO';
+    }
+
+    public function isLector(){
+        return AuthenticactionService::isAuthenticated() && !$this->isBibliotecario();
     }
 
     public function getCurrentEmail(){
@@ -83,13 +94,13 @@ abstract class BasicView
     public function prevPageUrl(){
         $page = $this->getPage();
         if(!$page || $this->isFirstPage()) return '';
-        return $this->getCurrentUrlWithPage($page->page-1);
+        return Router::getCurrentUrlWithPage($page->page-1);
     }
 
     public function nextPageUrl(){
         $page = $this->getPage();
         if(!$page || $this->isLastPage()) return '';
-        return $this->getCurrentUrlWithPage($page->page+1);
+        return Router::getCurrentUrlWithPage($page->page+1);
     }
 
     public function getPages(){
@@ -101,24 +112,31 @@ abstract class BasicView
             array_push($pages,[
                 'active'=>$i==$page->page,
                 'number'=>$i,
-                'url'=>$this->getCurrentUrlWithPage($i)
+                'url'=>Router::getCurrentUrlWithPage($i)
             ]);
         }
         return $pages;
     }
 
-    private function getCurrentUrlWithPage($pageNum){
-        $url = strtok($_SERVER["REQUEST_URI"],'?');
-        $tmp = $_GET;
-        $tmp['page'] = $pageNum;
-        return $url.'?'.http_build_query($tmp);
+    public function getSizeUrl($size){
+        return Router::getSizeUrl($size);
     }
 
-    public function getSizeUrl($size){
-        $url = strtok($_SERVER["REQUEST_URI"],'?');
-        $tmp = $_GET;
-        $tmp['size'] = $size;
-        return $url.'?'.http_build_query($tmp);
+    public function setAlert($alert): void
+    {
+        $this->alert = $alert;
+    }
+
+    public function isAlert(){
+        return !is_null($this->alert);
+    }
+
+    public function getAlertMessage(){
+        return $this->alert['message'];
+    }
+
+    public function getAlertType(){
+        return $this->alert['type'];
     }
 
 }

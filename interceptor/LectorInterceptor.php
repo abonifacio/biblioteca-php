@@ -2,18 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: Augusto
- * Date: 8/4/2018
- * Time: 17:02
+ * Date: 9/4/2018
+ * Time: 22:39
  */
 
 namespace Interceptor;
 
 
 use Exception\FordibbenException;
-use Exception\NotAuthorizedException;
 use Utils\AuthenticactionService;
 
-class BibliotecarioInterceptor implements RouterInterceptor
+class LectorInterceptor implements RouterInterceptor
 {
 
     /**
@@ -25,6 +24,6 @@ class BibliotecarioInterceptor implements RouterInterceptor
     function intercept($routerParams, $postParams)
     {
         AuthenticactionService::getCurrentId();
-        if(AuthenticactionService::getCurrentRol()!=='BIBLIOTECARIO') throw new FordibbenException();
+        if(AuthenticactionService::getCurrentRol()!=='LECTOR') throw new FordibbenException();
     }
 }

@@ -9,14 +9,17 @@
 namespace View;
 
 
+use Entity\Libro;
+
 class LibroDetalleView extends BasicView
 {
     public $libro = [];
     public $autor = [];
 
-    public function __construct()
+    public function __construct(Libro $libro)
     {
-        parent::__construct('libro-detalle', 'Libro: ');
+        parent::__construct('libro-detalle', 'Libro: '.$libro->titulo);
+        $this->libro = $libro;
     }
 
 }

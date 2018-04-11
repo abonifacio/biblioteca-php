@@ -22,6 +22,11 @@ class AuthenticactionService
         return isset($_SESSION['user_email']) ? $_SESSION['user_email'] : '';
     }
 
+    public static function getCurrentId(){
+        if(!self::isAuthenticated()) throw new NotAuthorizedException('Debe estar autenticado para realizar esta operación');
+        return $_SESSION['user_id'];
+    }
+
     public static function getCurrentRol(){
         return isset($_SESSION['user_rol']) ? $_SESSION['user_rol'] : '';
     }

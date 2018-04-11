@@ -28,4 +28,12 @@ class Usuario extends AbstractEntity
         return "usuarios";
     }
 
+    public function getFullName(){
+        return $this->nombre.' '.$this->apellido;
+    }
+
+    public function getFoto(){
+        return "data:image/jpg;base64,".base64_encode($this->foto);
+    }
+
 }

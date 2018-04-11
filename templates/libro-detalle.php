@@ -10,7 +10,7 @@
                 </p>
             </div>
             <div class="col-sm-auto">
-                <img src="<?php echo $this->libro->getPortada() ?>" />
+                <img class="foto-portada-datalle"  src="<?php echo $this->libro->getPortada() ?>" />
             </div>
         </div>
         <!--        <a href="#" class="card-link">Card link</a>-->

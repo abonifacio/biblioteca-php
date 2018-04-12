@@ -19,16 +19,12 @@ class OperacionRepository extends AbstractRepository
         return Operacion::class;
     }
 
-    public static function findOperacion($libroId,$userId){
-        return parent::findOne("SELECT * FROM operaciones WHERE libros_id = ? and lector_id = ?",['dd',$libroId,$userId]);
-    }
-
     public static function setEstado($operacionId,$estado){
         parent::update("UPDATE operaciones SET ultimo_estado = ? WHERE id = ?",['sd',$estado,$operacionId,]);
     }
 
-    public static function create($userId,$libroId,$estado){
-        parent::insert("INSERT INTO operaciones (ultimo_estado,fecha_ultima_modificacion,lector_id,libros_id) VALUES (?,NOW(),?,?)",['sdd',$estado,$userId,$libroId]);
+    public static function create($userId,$libroId){
+        parent::insert("INSERT INTO operaciones (ultimo_estado,fecha_ultima_modificacion,lector_id,libros_id) VALUES ('RESERVADO',NOW(),?,?)",['dd',$userId,$libroId]);
     }
 
     public static function countReservadosOPrestadosForUser($user_id){

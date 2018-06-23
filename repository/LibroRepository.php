@@ -36,6 +36,7 @@ class LibroRepository extends AbstractRepository
         if(count($conds)>0){
             $sql .= " WHERE ".join(" and ",$conds);
         }
+        $sql .= " order by l.titulo";
         return self::page($sql,self::formatParams($params),$pager);
     }
 

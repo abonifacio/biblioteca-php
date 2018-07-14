@@ -42,4 +42,9 @@ class Operacion extends AbstractEntity
     {
         return $this->lectorNombre." ".$this->lectorApellido;
     }
+
+    public static function excluirAcentos()
+    {
+        return ['libroPortada'];
+    }
 }

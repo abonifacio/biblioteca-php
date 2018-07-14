@@ -24,7 +24,7 @@ require_once 'autoloader.php';
     Router::add('/perfil',['controller' => 'Usuario', 'action' => 'perfil','interceptors'=>['Lector']]);
     Router::add('/admin',['controller' => 'Usuario', 'action' => 'admin','interceptors'=>['Bibliotecario']]);
     Router::add('/prestar',['controller' => 'Usuario', 'action' => 'prestar','interceptors'=>['Bibliotecario']]);
-    Router::add('/devolver',['controller' => 'Usuario', 'action' => 'admin','interceptors'=>['Bibliotecario']]);
+    Router::add('/devolver',['controller' => 'Usuario', 'action' => 'devolver','interceptors'=>['Bibliotecario']]);
 
 $path = isset($_SERVER['PATH_INFO'])? $_SERVER['PATH_INFO'] : '/';
     try {

@@ -21,9 +21,17 @@ abstract class AbstractEntity
         $obj = new $clazz();
         foreach ($array as $field => $value){
             if(property_exists($clazz,$field)){
-                $obj->$field = $value;
+                if(is_string($value) && !in_array($field,static::excluirAcentos())){
+                    $obj->$field = htmlentities ($value,ENT_IGNORE,'ISO8859-1');
+                }else{
+                    $obj->$field = $value;
+                }
             }
         }
         return $obj;
+    }
+
+    public static function excluirAcentos(){
+        return [];
     }
 }

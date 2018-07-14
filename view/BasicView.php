@@ -127,6 +127,10 @@ abstract class BasicView
         $this->alert = $alert;
     }
 
+    public function mustShowSearch(){
+        return true;
+    }
+
     public function isAlert(){
         return !is_null($this->alert);
     }

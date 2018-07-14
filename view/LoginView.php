@@ -21,4 +21,8 @@ class LoginView extends BasicView
         parent::__construct('login', 'Login');
     }
 
+    public function mustShowSearch()
+    {
+        return false;
+    }
 }

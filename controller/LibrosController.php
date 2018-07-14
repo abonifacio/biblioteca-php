@@ -60,7 +60,7 @@ class LibrosController extends BasicController
             Router::redirect($redirect,Router::errorMessage('El usuario ya tiene el libro reservado o prestado'));
             return;
         }
-        OperacionRepository::create($libro,$user_id);
+        OperacionRepository::create($user_id,$libro);
         Router::redirect($redirect,Router::successMessage('Libro reservado correctamente'));
     }
 

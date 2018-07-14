@@ -36,4 +36,8 @@ class Libro extends AbstractEntity
         return $this->cantidad - $this->prestados - $this->reservados;
     }
 
+    public static function excluirAcentos()
+    {
+        return ['portada'];
+    }
 }

@@ -36,4 +36,8 @@ class Usuario extends AbstractEntity
         return "data:image/jpg;base64,".base64_encode($this->foto);
     }
 
+    public static function excluirAcentos()
+    {
+        return ['foto'];
+    }
 }

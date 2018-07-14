@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Material Design for Bootstrap fonts and icons -->
@@ -52,6 +52,7 @@
                 <img src="<?php echo $this->getStatic('logo_informatica_large.png') ?>" alt="Biblioteca">
             </a>
         </div>
+        <?php if($this->mustShowSearch()) { ?>
         <div class="col-sm-6">
             <form action="<?php echo $this->getUrl('/') ?>" method="GET">
                 <div class="row align-items-end">
@@ -71,6 +72,7 @@
                 </div>
             </form>
         </div>
+        <?php } ?>
     </div>
     <?php
     $this->render();

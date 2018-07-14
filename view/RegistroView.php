@@ -22,4 +22,10 @@ class RegistroView extends BasicView
         $this->errors = $errors;
         $this->usuario = is_null($usuario) ? new Usuario() : $usuario;
     }
+
+
+    public function mustShowSearch()
+    {
+        return false;
+    }
 }

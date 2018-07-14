@@ -44,7 +44,8 @@ class UsuarioController extends BasicController
         $operacionId = $this->post_params['operacion_id'];
         $operacion = OperacionRepository::get($operacionId);
         if($operacion->ultimo_estado===$estado){
-            Router::redirect($redirect,Router::warningMessage("Libro ya se econtraba $estado"));
+            $estado = strtolower($estado);
+            Router::redirect($redirect,Router::warningMessage("El libro ya se econtraba $estado"));
             return;
         }
         OperacionRepository::setEstado($operacionId,$estado);

@@ -51,7 +51,7 @@ class OperacionRepository extends AbstractRepository
         $sql = "SELECT o.*, l.titulo libroTitulo, l.portada libroPortada, a.nombre autorNombre, a.apellido autorApellido, a.id autorId FROM operaciones o "
             ."INNER JOIN libros l on o.libros_id = l.id "
             ."INNER JOIN autores a on a.id = l.autores_id "
-            ."WHERE o.lector_id = ?";
+            ."WHERE o.lector_id = ? ORDER BY o.fecha_ultima_modificacion DESC";
         return parent::page($sql,['d',$userId],$pager);
     }
 
@@ -84,6 +84,7 @@ class OperacionRepository extends AbstractRepository
         if(count($conds)>0){
             $sql .= " WHERE ".join(" and ",$conds);
         }
+        $sql.= " ORDER BY o.fecha_ultima_modificacion DESC";
         return parent::page($sql,self::formatParams($params),$pager);
     }
 
